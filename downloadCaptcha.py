@@ -6,7 +6,7 @@ links = {
     "iust" : "https://golestan.iust.ac.ir/",
     "yazd" : "https://golestan.yazd.ac.ir/",
     "qom" : "https://edu.qom.ac.ir/",
-    "ui" : "https://golestan.ui.ac.ir/",
+    # "ui" : "https://golestan.ui.ac.ir/",
     "znu" : "https://golestan.znu.ac.ir/",
     "sbu" : "https://golestan.sbu.ac.ir/",
     "modares" : "https://golestan.modares.ac.ir/",
@@ -23,10 +23,10 @@ links = {
 slice = f"Forms/AuthenticateUser/captcha.aspx"
 
 #--------------------------------------------
-for i in range(100,2000):
-    nameUni = list(links.keys())[i%16]
+for i in range(0,2000):
+    nameUni = list(links.keys())[i%15]
 
-    file_name = f"captcha/test2/{i}-{nameUni}.png"
+    file_name = f"captcha/test3/{i}-{nameUni}.png"
 
     url = f"{links[nameUni]}{slice}"
 
