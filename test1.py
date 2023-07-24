@@ -5,6 +5,7 @@ import os
 #--------------------------------------------
 url = 'https://golestan.iust.ac.ir/Forms/AuthenticateUser/captcha.aspx'
 
+
 #--------------------------------------------
 for j in range(5,20):
 
@@ -26,14 +27,3 @@ for j in range(5,20):
             print('Image Couldn\'t be retrieved')
         time.sleep(3) 
 #--------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
