@@ -29,8 +29,19 @@ def GaussianBlur(path,fileName):
     gaussian_img = cv2.GaussianBlur(img, (3, 3), 0)
     cv2.imwrite(f'test/gaussian/{fileName}', gaussian_img)
 #--------------------------------------------
+#step 3 dilate
 def dilateImage(path,fileName):
     img = cv2.imread(path)
     max_img = cv2.dilate(img, None, iterations=1)
     cv2.imwrite(f'test/dilate/{fileName}', max_img)
+#--------------------------------------------
+def TImage(path, fileName):
+    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    color_mapped_img = cv2.applyColorMap(img, cv2.COLORMAP_HOT)
+    cv2.imwrite(f'test/Tempature/{fileName}', color_mapped_img)
+#--------------------------------------------
+def BinaryImage(path, fileName):
+    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    ret, thresh_img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    cv2.imwrite(f'test/final/{fileName}', thresh_img)
 #--------------------------------------------

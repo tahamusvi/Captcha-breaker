@@ -31,11 +31,18 @@ import os
 #     file_path = os.path.join(path, file_name)
 #     GrayImage(file_path,file_name)
 #--------------------------------------------
-path = "test/grayed/"
+# path = "test/grayed/"
+
+# for file_name in os.listdir(path):
+
+#     file_path = os.path.join(path, file_name)
+#     MedianImage(file_path,file_name)
+#     GaussianBlur(file_path,file_name)
+#     dilateImage(file_path,file_name)
+#--------------------------------------------
+path = "test/dilate/"
 
 for file_name in os.listdir(path):
 
     file_path = os.path.join(path, file_name)
-    MedianImage(file_path,file_name)
-    GaussianBlur(file_path,file_name)
-    dilateImage(file_path,file_name)
+    TImage(file_path,file_name)
