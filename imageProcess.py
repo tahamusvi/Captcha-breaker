@@ -40,9 +40,29 @@ import os
 #     GaussianBlur(file_path,file_name)
 #     dilateImage(file_path,file_name)
 #--------------------------------------------
-path = "test/dilate/"
+# path = "test/dilate/"
+
+# for file_name in os.listdir(path):
+
+#     file_path = os.path.join(path, file_name)
+#     TImage(file_path,file_name)
+#--------------------------------------------
+# path = "test/dilate3/"
+
+# for file_name in os.listdir(path):
+
+#     file_path = os.path.join(path, file_name)
+#     convert_to_binary(file_path,file_name,"test/final/")
+
+#--------------------------------------------
+path = "test/ts2/"
 
 for file_name in os.listdir(path):
 
     file_path = os.path.join(path, file_name)
-    TImage(file_path,file_name)
+    # CropImage(file_path,file_name,path)
+    GrayImage(file_path,file_name,path)
+    dilateImage(file_path,file_name,path)
+    InvertImage(file_path,file_name,path)
+    TImage(file_path,file_name,path)
+    convert_to_binary(file_path,file_name,path)
