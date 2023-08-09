@@ -60,7 +60,7 @@ path = "test/ts2/"
 for file_name in os.listdir(path):
 
     file_path = os.path.join(path, file_name)
-    # CropImage(file_path,file_name,path)
+    CropImage(file_path,file_name,path)
     GrayImage(file_path,file_name,path)
     dilateImage(file_path,file_name,path)
     InvertImage(file_path,file_name,path)
