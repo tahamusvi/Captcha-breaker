@@ -23,6 +23,6 @@ for file_name in os.listdir(path):
     file_path = os.path.join(path, file_name)
     for file_name2 in os.listdir(path):
         file_path2 = os.path.join(path, file_name2)
-        if(file_path != file_path2) and (compare_images(file_path)):
-            os.remove(file_name2)
+        if((file_path != file_path2) and (compare_images(file_path,file_path2))):
+            os.remove(file_path)
         
