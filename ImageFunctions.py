@@ -73,3 +73,50 @@ def convert_to_binary(path,fileName,final_path):
 
     # Save the binary image to the output path
     cv2.imwrite(f'{final_path}{fileName}', thresh_img)
+#------------------------------------------
+def cut_image(path,fileName,final_path):
+    img = cv2.imread(path)
+    height, width = img.shape[:2]
+
+    # cut from the left and then right
+    flag = False
+    left_row = 0
+    right_row = 0
+    for i in range(2):
+        for x in range(width):
+            for y in range(height):
+                if i == 0:
+                    pxl = img[x,y]
+                else:
+                    pxl = img[-x-1, y]
+                if all(pxl != [0,0,0]):
+                    flag = True
+                    break
+
+            if flag:
+                break
+
+            else:
+                if i == 0:
+                    left_row = x
+                else:
+                    right_row = x
+
+    img = Image.open(path)
+    img_cropped = img.crop((left_row, 0, width - right_row, height))
+    img_cropped.save(f'{final_path}{fileName}')
+#------------------------------------------
+def separate_image(path,fileName,final_path):
+    img = cv2.imread(path)
+    height, width = img.shape[:2]
+    img_rows = []
+    for x in range(width):
+        c_row = 0
+        for y in range(height):
+            pxl = img[x, y]
+            c_row += sum(pxl)
+        img_rows.append(c_row)
+
+    already_used = []
+    for i, index in enumerate(img_rows):
+        if i == min(img_rows)

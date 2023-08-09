@@ -64,5 +64,6 @@ for file_name in os.listdir(path):
     GrayImage(file_path,file_name,path)
     dilateImage(file_path,file_name,path)
     InvertImage(file_path,file_name,path)
+    cut_image(file_path,file_name,path)
     TImage(file_path,file_name,path)
     convert_to_binary(file_path,file_name,path)
