@@ -5,7 +5,7 @@ from google.cloud import vision
 client = vision.ImageAnnotatorClient()
 
 # Set the path to the image file
-image_path = 'path/to/image.jpg'
+image_path = 'test/ts2/a.png'
 
 # Perform OCR on the image
 response = client.annotate_image(image_path)
