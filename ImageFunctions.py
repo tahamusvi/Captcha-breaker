@@ -99,7 +99,7 @@ def cut_image(path,fileName,final_path):
             left_row = x
 
     flag = False
-    print(width)
+    # print(width)
     for x in range(0,width):
         for y in range(height):
             pxl = img[y,-x-1]
@@ -114,8 +114,8 @@ def cut_image(path,fileName,final_path):
             right_row = x
 
     # img = Image.open(path)
-    print(right_row)
-    print(left_row)
+    # print(right_row)
+    # print(left_row)
 
     img_cropped = img2.crop((left_row, 0, width - right_row, height))
     img_cropped.save(f'{final_path}/{fileName}')

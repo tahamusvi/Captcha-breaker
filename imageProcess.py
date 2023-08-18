@@ -56,20 +56,23 @@ import os
 
 #--------------------------------------------
 path = "test/ts2/"
+pathf = path + "s/"
+
 
 for file_name in os.listdir(path):
 
     file_path = os.path.join(path, file_name)
 
-    cut_image(file_path,file_name,path)
-    separate_image(file_path,file_name,path)
+    
     # CropImage(file_path,file_name,path)
 
 
-    # CropImage(file_path,file_name,path)
-    # GrayImage(file_path,file_name,path)
-    # dilateImage(file_path,file_name,path)
-    # InvertImage(file_path,file_name,path)
-    # cut_image(file_path,file_name,path)
-    # TImage(file_path,file_name,path)
-    # convert_to_binary(file_path,file_name,path)
+    CropImage(file_path,file_name,pathf)
+    GrayImage(file_path,file_name,pathf)
+    dilateImage(file_path,file_name,pathf)
+    InvertImage(file_path,file_name,pathf)
+    cut_image(file_path,file_name,pathf)
+    TImage(file_path,file_name,pathf)
+    convert_to_binary(file_path,file_name,pathf)
+    cut_image(file_path,file_name,pathf)
+    separate_image(file_path,file_name,pathf)
