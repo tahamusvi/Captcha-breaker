@@ -60,7 +60,8 @@ path = "test/ts2/"
 for file_name in os.listdir(path):
 
     file_path = os.path.join(path, file_name)
-    cut_image(file_path,file_name,path)
+    # cut_image(file_path,file_name,path)
+    separate_image(file_path,file_name,path)
     # CropImage(file_path,file_name,path)
 
 
