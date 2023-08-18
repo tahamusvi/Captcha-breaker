@@ -1,0 +1,48 @@
+import cv2
+from PIL import Image
+
+img = cv2.imread(path)
+    img2 = Image.open(path)
+    width, height = img2.size
+    img_rows = []
+    for x in range(width):
+        c_row = 0
+        for y in range(height):
+            pxl = img[y, x]
+            c_row -= sum(pxl)
+        img_rows.append(c_row)
+
+    def sort_image():
+        sorted_img_rows = sorted(img_rows)
+        img_rows_reformatted = []
+        for i, index in enumerate(img_rows):
+            img_rows_reformatted.append([index, i])
+        sorted_img_rows = sorted(img_rows_reformatted)
+        return sorted_img_rows
+
+    already_used = []
+    target_row = []
+    sorted_img_rows = sort_image()
+
+    for i in sorted_img_rows:
+        if i[1] not in already_used:
+            target_row.append(i[1])
+            for j in range(11):
+                try:
+                    already_used.append(i[1] + j - 5)
+                except:
+                    pass
+        if len(target_row) == 4:
+            break
+
+    target_row = sorted(target_row)
+    img_cropped = []
+    img_cropped.append(img2.crop((0, 0, target_row[0], height)))
+    for i in range(3):
+        img_cropped.append(img2.crop((target_row[i], 0, target_row[i + 1], height)))
+    img_cropped.append(img2.crop((target_row[3], 0, width, height)))
+    for i in range(5):
+        try:
+            img_cropped[i].save(f'{final_path}{fileName}')
+        except:
+            pass

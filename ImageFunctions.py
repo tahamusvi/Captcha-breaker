@@ -76,61 +76,79 @@ def convert_to_binary(path,fileName,final_path):
 #------------------------------------------
 def cut_image(path,fileName,final_path):
     img = cv2.imread(path)
-    # height, width = img.shape[:2]
-    img2 = Image.open(path)
-    width, height = img2.size
+    height, width = img.shape[:2]
 
     # cut from the left and then right
     flag = False
     left_row = 0
     right_row = 0
+    for i in range(2):
+        for x in range(width):
+            for y in range(height):
+                if i == 0:
+                    pxl = img[x,y]
+                else:
+                    pxl = img[-x-1, y]
+                if all(pxl != [0,0,0]):
+                    flag = True
+                    break
 
-    for x in range(width):
-        for y in range(height):
-            pxl = img[y,x]
-            if all(pxl != [0,0,0]):
-                flag = True
+            if flag:
                 break
 
-        if flag:
-            break
+            else:
+                if i == 0:
+                    left_row = x
+                else:
+                    right_row = x
 
-        else:
-            left_row = x
-
-    flag = False
-    print(width)
-    for x in range(0,width):
-        for y in range(height):
-            pxl = img[y,-x-1]
-            if all(pxl != [0,0,0]):
-                flag = True
-                break
-
-        if flag:
-            break
-
-        else:
-            right_row = x
-
-    # img = Image.open(path)
-    print(right_row)
-    print(left_row)
-
-    img_cropped = img2.crop((left_row, 0, width - right_row, height))
-    img_cropped.save(f'{final_path}/{fileName}')
+    img = Image.open(path)
+    img_cropped = img.crop((left_row, 0, width - right_row, height))
+    img_cropped.save(f'{final_path}{fileName}')
 #------------------------------------------
-# def separate_image(path,fileName,final_path):
-#     img = cv2.imread(path)
-#     height, width = img.shape[:2]
-#     img_rows = []
-#     for x in range(width):
-#         c_row = 0
-#         for y in range(height):
-#             pxl = img[x, y]
-#             c_row += sum(pxl)
-#         img_rows.append(c_row)
+def separate_image(path,fileName,final_path):
+    img = cv2.imread(path)
+    img2 = Image.open(path)
+    width, height = img2.size
+    img_rows = []
+    for x in range(width):
+        c_row = 0
+        for y in range(height):
+            pxl = img[y, x]
+            c_row -= sum(pxl)
+        img_rows.append(c_row)
 
-#     already_used = []
-#     for i, index in enumerate(img_rows):
-#         if i == min(img_rows)
+    def sort_image():
+        sorted_img_rows = sorted(img_rows)
+        img_rows_reformatted = []
+        for i, index in enumerate(img_rows):
+            img_rows_reformatted.append([index, i])
+        sorted_img_rows = sorted(img_rows_reformatted)
+        return sorted_img_rows
+
+    already_used = []
+    target_row = []
+    sorted_img_rows = sort_image()
+
+    for i in sorted_img_rows:
+        if i[1] not in already_used:
+            target_row.append(i[1])
+            for j in range(11):
+                try:
+                    already_used.append(i[1] + j - 5)
+                except:
+                    pass
+        if len(target_row) == 4:
+            break
+
+    target_row = sorted(target_row)
+    img_cropped = []
+    img_cropped.append(img2.crop((0, 0, target_row[0], height)))
+    for i in range(3):
+        img_cropped.append(img2.crop((target_row[i], 0, target_row[i + 1], height)))
+    img_cropped.append(img2.crop((target_row[3], 0, width, height)))
+    for i in range(5):
+        try:
+            img_cropped[i].save(f'{final_path}{fileName}')
+        except:
+            pass
