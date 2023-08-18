@@ -119,6 +119,18 @@ def cut_image(path,fileName,final_path):
 
     img_cropped = img2.crop((left_row, 0, width - right_row, height))
     img_cropped.save(f'{final_path}/{fileName}')
+
+#------------------------------------------
+def rotate_image(path,fileName,final_path,degree):
+    # خواندن تصویر
+    img2 = Image.open(path)
+    
+    if(degree):
+        rotated_image = img2.transpose(Image.ROTATE_90).transpose(Image.FLIP_LEFT_RIGHT)
+    else:
+        rotated_image = img2.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
+    
+    rotated_image.save(f'{final_path}/{fileName}')
 #------------------------------------------
 def separate_image(path,fileName,final_path):
     img = cv2.imread(path)
@@ -144,12 +156,12 @@ def separate_image(path,fileName,final_path):
     target_row = []
     sorted_img_rows = sort_image()
 
-    for i in sorted_img_rows:
+    for i in sorted_img_rows[5:-5]:
         if i[1] not in already_used:
             target_row.append(i[1])
-            for j in range(11):
+            for j in range(17):
                 try:
-                    already_used.append(i[1] + j - 5)
+                    already_used.append(i[1] + j - 8)
                 except:
                     pass
         if len(target_row) == 4:
@@ -163,6 +175,12 @@ def separate_image(path,fileName,final_path):
     img_cropped.append(img2.crop((target_row[3], 0, width, height)))
     for i in range(5):
         try:
-            img_cropped[i].save(f'{final_path}{fileName}')
+            img_cropped[i].save(f'{final_path}{i}{fileName}')
+            cut_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}')
+            rotate_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}',True)
+            cut_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}')
+            rotate_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}',True)
         except:
             pass
+
+
