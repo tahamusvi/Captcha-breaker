@@ -132,7 +132,7 @@ def rotate_image(path,fileName,final_path,degree):
     
     rotated_image.save(f'{final_path}/{fileName}')
 #------------------------------------------
-def separate_image(path,fileName,final_path):
+def separate_image(path,fileName,final_path,name=None):
     img = cv2.imread(path)
     img2 = Image.open(path)
     width, height = img2.size
@@ -173,14 +173,24 @@ def separate_image(path,fileName,final_path):
     for i in range(3):
         img_cropped.append(img2.crop((target_row[i], 0, target_row[i + 1], height)))
     img_cropped.append(img2.crop((target_row[3], 0, width, height)))
-    for i in range(5):
-        try:
-            img_cropped[i].save(f'{final_path}{i}{fileName}')
-            cut_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}')
-            rotate_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}',True)
-            cut_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}')
-            rotate_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}',True)
-        except:
-            pass
+    if(name):
+        
+
+        for i in range(5):
+            print(name[i])
+            try:
+                img_cropped[i].save(f'{final_path}{name[i]}.png')
+            except:
+                pass
+    else:
+        for i in range(5):
+            try:
+                img_cropped[i].save(f'{final_path}{i}{fileName}')
+                cut_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}')
+                rotate_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}',True)
+                cut_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}')
+                rotate_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}',True)
+            except:
+                pass
 
 

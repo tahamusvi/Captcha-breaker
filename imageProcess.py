@@ -55,24 +55,36 @@ import os
 #     convert_to_binary(file_path,file_name,"test/final/")
 
 #--------------------------------------------
+def respy(file_path,file_name,path):
+    sep = f"{path}sep/"
+    # CropImage(file_path,file_name,path)
+    # GrayImage(file_path,file_name,path)
+    # dilateImage(file_path,file_name,path)
+    # InvertImage(file_path,file_name,path)
+    # cut_image(file_path,file_name,path)
+    # TImage(file_path,file_name,path)
+    # convert_to_binary(file_path,file_name,path)
+    # cut_image(file_path,file_name,path)
+    separate_image(file_path,file_name,sep)
+    
+#--------------------------------------------
 path = "test/ts2/"
-pathf = path + "s/"
+sep = f"{path}sep/"
 
+for i in range(35,36):
+    current_path = f"{path}{i}/"
 
-for file_name in os.listdir(path):
+    for file_name in os.listdir(current_path):
+        if(file_name == "sep"):
+            continue
+        file_path = os.path.join(current_path, file_name)
+        respy(file_path,file_name,current_path)
 
-    file_path = os.path.join(path, file_name)
+    
+
 
     
     # CropImage(file_path,file_name,path)
 
 
-    CropImage(file_path,file_name,pathf)
-    GrayImage(file_path,file_name,pathf)
-    dilateImage(file_path,file_name,pathf)
-    InvertImage(file_path,file_name,pathf)
-    cut_image(file_path,file_name,pathf)
-    TImage(file_path,file_name,pathf)
-    convert_to_binary(file_path,file_name,pathf)
-    cut_image(file_path,file_name,pathf)
-    separate_image(file_path,file_name,pathf)
+    
