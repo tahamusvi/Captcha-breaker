@@ -13,10 +13,22 @@ def respy(file_path,file_name,path):
     cut_image(new_file_path,file_name,path)
     TImage(new_file_path,file_name,path)
     convert_to_binary(new_file_path,file_name,path)
-
     cut_image(new_file_path,file_name,path)
-    separate_image(new_file_path,file_name,path,file_name)
-    
+    separate_image(new_file_path,file_name,path)
+#--------------------------------------------
+def respy2(file_path,file_name,path):
+    CropImage(file_path,file_name,path)
+
+    # InvertImage(file_path,file_name,path)
+    # cut_image(file_path,file_name,path)
+    new_file_path = f"{path}{file_name}"
+    MedianImage(new_file_path,file_name,path)
+    MedianImage(new_file_path,file_name,path)
+
+    dilateImage(new_file_path,file_name,path)
+    # TImage(new_file_path,file_name,path)
+    convert_to_binary(new_file_path,file_name,path)
+    separate_image(new_file_path,file_name,path,f"1{file_name}")    
 #--------------------------------------------
 path = "dataset/"
 sep = f"{path}sep/"
@@ -28,7 +40,11 @@ for i in range(35,36):
         print(file_name)
         
         file_path = os.path.join(current_path, file_name)
-        respy(file_path,file_name,f"{path}after/")
+        respy2(file_path,file_name,f"{path}after/")
+
+
+
+
 
 
     

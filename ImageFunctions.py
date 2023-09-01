@@ -192,5 +192,18 @@ def separate_image(path,fileName,final_path,name=None):
                 rotate_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}',True)
             except:
                 pass
+#------------------------------------------
+def sharp_img(img):
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    blur_image = cv2.blur(gray_img, (4, 4))
+    gblur_img = cv2.GaussianBlur(blur_image, (0, 0), 6)
+    sharp_img = cv2.addWeighted(gray_img, 1.80, gblur_img, -0.60, 0)
+    sharp_not_img = cv2.bitwise_not(sharp_img);
+    retval, img_zeroone = cv2.threshold(sharp_not_img, 20, 255, cv2.THRESH_BINARY)
+    return img_zeroone
+#------------------------------------------
+def clear_img(img):
 
-
+  kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
+  opening_img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+  return opening_img

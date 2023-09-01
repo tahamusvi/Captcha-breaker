@@ -1,5 +1,6 @@
 from ImageFunctions import *
 import os
+from matplotlib import pyplot as plt
 #--------------------------------------------
 # def count_files(folder_path):
 #     file_count = 0
@@ -56,31 +57,51 @@ import os
 
 #--------------------------------------------
 def respy(file_path,file_name,path):
-    sep = f"{path}sep/"
-    # CropImage(file_path,file_name,path)
-    # GrayImage(file_path,file_name,path)
-    # dilateImage(file_path,file_name,path)
-    # InvertImage(file_path,file_name,path)
-    # cut_image(file_path,file_name,path)
-    # TImage(file_path,file_name,path)
-    # convert_to_binary(file_path,file_name,path)
-    # cut_image(file_path,file_name,path)
-    separate_image(file_path,file_name,sep)
+    output = f"{path}output/"
+
+    # CropImage(file_path,file_name,output)
+    GrayImage(file_path,file_name,output)
     
+    file_path = f"{output}{file_name}"
+
+    
+    dilateImage(file_path,file_name,output)
+    InvertImage(file_path,file_name,output)
+    cut_image(file_path,file_name,output)
+    TImage(file_path,file_name,output)
+    convert_to_binary(file_path,file_name,output)
+    # cut_image(file_path,file_name,path)
+    # separate_image(file_path,file_name,sep)
+#--------------------------------------------
+def respy2(file_path,path):
+    output = f"{path}output2/"
+    im = cv2.imread(file_path)
+    sim = sharp_img(im)
+    cl_img = clear_img(sim)
+    cv2.imwrite(f'{output}{file_name}', cl_img)
+
 #--------------------------------------------
 path = "test/ts2/"
 sep = f"{path}sep/"
 
-for i in range(35,36):
+for i in range(1,2):
     current_path = f"{path}{i}/"
 
     for file_name in os.listdir(current_path):
-        if(file_name == "sep"):
+        if(file_name == "output" or file_name ==  "output2" or file_name ==  "croped"):
+            print(file_name)
             continue
         file_path = os.path.join(current_path, file_name)
+        CropImage(file_path,file_name,f"{current_path}croped/")
+    for file_name in os.listdir(f"{current_path}croped/"):
+        file_path = os.path.join(f"{current_path}croped/", file_name)
         respy(file_path,file_name,current_path)
+        respy2(file_path,current_path)
 
-    
+
+
+
+        
 
 
     
