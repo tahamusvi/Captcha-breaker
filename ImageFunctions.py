@@ -57,6 +57,33 @@ def InvertImage(img):
 def bitwise_not(img):
     return cv2.bitwise_not(img)
 #--------------------------------------------
+def clear_img(img):
+  kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
+  opening_img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+  return opening_img
+#--------------------------------------------
+def remove_white_pixel(img):
+    width, height = img.shape[:2]
+
+    for x in range(width):
+        for y in range(height):
+            count = 0
+            pxl = img[x, y]
+            if np.all(pxl == [255, 255, 255]):
+                for i in range(max(x - 1, 0), min(x + 2, width)):
+                    for j in range(max(y - 1, 0), min(y + 2, height)):
+                        if np.all(img[i, j] == [255, 255, 255]):
+                            count += 1
+
+                if count < 5:
+                    img[x, y] = 0
+                    
+                    
+
+    return img
+                
+
+#--------------------------------------------
 def threshImage(path, fileName,final_path):
     img = cv2.imread(path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -226,8 +253,4 @@ def separate_image(path,fileName,final_path,name=None):
             except:
                 pass
 #------------------------------------------
-def clear_img(img):
 
-  kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
-  opening_img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
-  return opening_img

@@ -79,18 +79,22 @@ def respy(file_path,file_name,path):
 def respy2(file_path,file_name,path):
 
     img = cv2.imread(file_path)
-    img2 = Image.open(file_path)
+    # img2 = Image.open(file_path)
     file_path = f"{path}output/{file_name}"
 
     gray_img = GrayImage(img)  
+    
     blur_image = simple_blur(gray_img) #blur_image = cv2.blur(gray_img, (4, 4))
     gblur_img = GaussianBlur(blur_image) #cv2.GaussianBlur(blur_image, (0, 0), 6)
     sharp_img = sharping(gray_img,gblur_img) #cv2.addWeighted(gray_img, 1.80, gblur_img, -0.60, 0)
     sharp_not_img = bitwise_not(sharp_img) #cv2.bitwise_not(sharp_img)
     img_zeroone = convert_to_binary2(sharp_not_img) #cv2.threshold(sharp_not_img, 20, 255, cv2.THRESH_BINARY)
+    
     cl_img = clear_img(img_zeroone)
+    removed_white_pixel = remove_white_pixel(cl_img)
+    
 
-    save_image_cv2(cl_img,file_path)
+    save_image_cv2(removed_white_pixel,file_path)
 
     # cut_image(file_path,file_name,path)
     # separate_image(file_path,file_name,sep)
