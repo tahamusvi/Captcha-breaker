@@ -2,8 +2,11 @@
 #--------------------------------------------
 import cv2
 from PIL import Image
+import numpy as np
 #--------------------------------------------
-
+def save_image_cv2(image,path):
+    cv2.imwrite(path, image)
+#--------------------------------------------
 #--------------------------------------------
 #step 1 crop link
 def CropImage(path,fileName,final_path):
@@ -11,43 +14,49 @@ def CropImage(path,fileName,final_path):
     width, height = img.size
     img_cropped = img.crop((0, 0, width, height-6))
     img_cropped.save(f'{final_path}{fileName}')
+    return img_cropped
 #--------------------------------------------
 #step 2 gray image
-def GrayImage(path,fileName,final_path):
-    img = cv2.imread(path)
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    cv2.imwrite(f'{final_path}{fileName}', gray_img)
-
+def GrayImage(img):
+    return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 #--------------------------------------------
-def MedianImage(path,fileName,final_path):
-    img = cv2.imread(path)
+def simple_blur(img):
+    return cv2.blur(img, (4, 4))
+#------------------------------------------
+def GaussianBlur(img):
+    return cv2.GaussianBlur(img,(0, 0), 6)
+#--------------------------------------------
+def sharping(gray_img,gblur_img):
+    return cv2.addWeighted(gray_img, 1.80, gblur_img, -0.60, 0)
+#------------------------------------------
+def MedianImage(img):
     median_img = cv2.medianBlur(img, 3)
     median_img = cv2.medianBlur(median_img, 3)
     median_img = cv2.medianBlur(median_img, 3)
-    cv2.imwrite(f'{final_path}{fileName}', median_img)
+    return median_img
 #--------------------------------------------
-def GaussianBlur(path,fileName,final_path):
-    img = cv2.imread(path)
-    gaussian_img = cv2.GaussianBlur(img, (3, 3), 0)
-    cv2.imwrite(f'{final_path}{fileName}', gaussian_img)
-#--------------------------------------------
+
 #step 3 dilate
-def dilateImage(path,fileName,final_path):
-    img = cv2.imread(path)
-    max_img = cv2.dilate(img, None, iterations=1)
-    cv2.imwrite(f'{final_path}{fileName}', max_img)
+def dilateImage(img):
+    return cv2.dilate(img, None, iterations=1)
 #--------------------------------------------
-def TImage(path, fileName,final_path):
-    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    color_mapped_img = cv2.applyColorMap(img, cv2.COLORMAP_HOT)
-    cv2.imwrite(f'{final_path}{fileName}', color_mapped_img)
+def TImage(img):
+    return cv2.applyColorMap(img, cv2.COLORMAP_HOT)
 #--------------------------------------------
-def BinaryImage(path, fileName,final_path):
-    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-    ret, thresh_img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
-    cv2.imwrite(f'{final_path}{fileName}', thresh_img)
+def convert_to_binary2(img):
+    ret, thresh_img = cv2.threshold(img, 20, 255, cv2.THRESH_BINARY)
+    return thresh_img
 #--------------------------------------------
-import numpy as np
+def convert_to_binary(img):
+    ret, thresh_img = cv2.threshold(img, 10, 200, cv2.THRESH_BINARY)
+    return thresh_img
+#--------------------------------------------
+def InvertImage(img):
+    return cv2.bitwise_not(img)
+#--------------------------------------------
+def bitwise_not(img):
+    return cv2.bitwise_not(img)
+#--------------------------------------------
 def threshImage(path, fileName,final_path):
     img = cv2.imread(path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -56,23 +65,47 @@ def threshImage(path, fileName,final_path):
     kernel = np.ones((3, 3), np.uint8)
     opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=1)
     cv2.imwrite(f'{final_path}{fileName}', opening)
-#--------------------------------------------
-def InvertImage(path,fileName,final_path):
-    img = cv2.imread(path)
-    thresh = cv2.bitwise_not(img)
-    cv2.imwrite(f'{final_path}{fileName}', thresh)
-#--------------------------------------------
-import cv2
+    return opening
+#------------------------------------------
+def cut_image_R(img,img2):
+    width, height = img2.size
 
-def convert_to_binary(path,fileName,final_path):
-    # Load the image in grayscale
-    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    # cut from the left and then right
+    flag = False
+    left_row = 0
+    right_row = 0
 
-    # Apply binary thresholding to the image
-    ret, thresh_img = cv2.threshold(img, 10, 200, cv2.THRESH_BINARY)
+    for x in range(width):
+        for y in range(height):
+            pxl = img[y,x]
+            if all(pxl != [0,0,0]):
+                flag = True
+                break
 
-    # Save the binary image to the output path
-    cv2.imwrite(f'{final_path}{fileName}', thresh_img)
+        if flag:
+            break
+
+        else:
+            left_row = x
+
+    flag = False
+    for x in range(0,width):
+        for y in range(height):
+            pxl = img[y,-x-1]
+            if all(pxl != [0,0,0]):
+                flag = True
+                break
+
+        if flag:
+            break
+
+        else:
+            right_row = x
+
+    img_cropped = img2.crop((left_row, 0, width - right_row, height))
+    img_cropped.save(f'1.png')
+    return cv2.imread(f'1.png')
+
 #------------------------------------------
 def cut_image(path,fileName,final_path):
     img = cv2.imread(path)
@@ -192,15 +225,6 @@ def separate_image(path,fileName,final_path,name=None):
                 rotate_image(f'{final_path}{i}{fileName}',f"{i}{fileName}",f'{final_path}',True)
             except:
                 pass
-#------------------------------------------
-def sharp_img(img):
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    blur_image = cv2.blur(gray_img, (4, 4))
-    gblur_img = cv2.GaussianBlur(blur_image, (0, 0), 6)
-    sharp_img = cv2.addWeighted(gray_img, 1.80, gblur_img, -0.60, 0)
-    sharp_not_img = cv2.bitwise_not(sharp_img);
-    retval, img_zeroone = cv2.threshold(sharp_not_img, 20, 255, cv2.THRESH_BINARY)
-    return img_zeroone
 #------------------------------------------
 def clear_img(img):
 
