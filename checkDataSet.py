@@ -4,6 +4,7 @@ import shutil
 def UpdateDataset():
     dataset = {
     "not_find" : 0,
+    "error" : 0,
     }
 
     folders = [f for f in os.listdir("dataset") if os.path.isdir(os.path.join("dataset", f))]
@@ -27,6 +28,13 @@ def delete_files_in_folders():
 
     print("all files deleted!")
 #--------------------------------------------------------------------------------------
-print(UpdateDataset())
-# delete_files_in_folders()
-print(UpdateDataset())
+def printDataSet():
+    dataset = UpdateDataset()
+    for key in dataset:
+        print(f"{key}: {dataset[key]}")
+#--------------------------------------------------------------------------------------
+
+
+delete_files_in_folders()
+printDataSet()
+# print(UpdateDataset())

@@ -98,6 +98,7 @@ def respy2(file_path,file_name,path):
 
     cut_image(file_path,file_name,f"{path}output/")
     separate_image(file_path,file_name,f"{path}outputc/")
+    # add_black_border(file_path,file_name,f"{path}outputc/",5)
 
 #--------------------------------------------
 path = "test/ts2/"
@@ -116,6 +117,11 @@ for i in range(1,2):
     for file_name in os.listdir(f"{current_path}croped/"):
         file_path = os.path.join(f"{current_path}croped/", file_name)
         respy2(file_path,file_name,current_path)
+    
+    for file_name in os.listdir(f"{current_path}outputc/"):
+        file_path = os.path.join(f"{current_path}outputc/", file_name)
+        add_black_border(file_path,file_name,f"{current_path}outputc",5)
+        
 
 
     

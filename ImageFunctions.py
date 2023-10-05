@@ -247,4 +247,10 @@ def separate_image(path,fileName,final_path,name=None):
             except:
                 pass
 #------------------------------------------
+def add_black_border(path,fileName,final_path,n):
+    image = Image.open(path)
+    bordered_image = Image.new(image.mode, (image.width + 2 * n, image.height + 2 * n), color=0)
+    bordered_image.paste(image, (n, n))
 
+    bordered_image.save(f'{final_path}/{fileName}')
+#------------------------------------------

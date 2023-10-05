@@ -13,6 +13,7 @@ MODEL_FILENAME = "captcha_model.hdf5"
 MODEL_LABELS_FILENAME = "model_labels.dat"
 CAPTCHA_IMAGE_FOLDER = "chars"
 NOT_FIND = "not_find"
+ERROR_FIND = "error"
 #---------------------------
 dataset = UpdateDataset()
 #---------------------------
@@ -68,61 +69,71 @@ captcha_image_files = list(paths.list_images(CAPTCHA_IMAGE_FOLDER))
 destination_folder = "dataset"
 
 for image_file in captcha_image_files:
-    image = cv2.imread(image_file)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    image = InvertImage(image)
-    image = cv2.copyMakeBorder(image, 20, 20, 20, 20, cv2.BORDER_REPLICATE)
-    thresh = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
-    contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    try:
+        image = cv2.imread(image_file)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = InvertImage(image)
+        image = cv2.copyMakeBorder(image, 20, 20, 20, 20, cv2.BORDER_REPLICATE)
+        thresh = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
+        contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 
-    contours = contours[1] if imutils.is_cv3() else contours[0]
+        contours = contours[1] if imutils.is_cv3() else contours[0]
 
-    letter_image_regions = []
+        letter_image_regions = []
 
-    for contour in contours:
-        (x, y, w, h) = cv2.boundingRect(contour)
+        for contour in contours:
+            (x, y, w, h) = cv2.boundingRect(contour)
 
-        if w / h > 1.25:
-            half_width = int(w / 2)
-            letter_image_regions.append((x, y, half_width, h))
-            letter_image_regions.append((x + half_width, y, half_width, h))
-        else:
-            letter_image_regions.append((x, y, w, h))
+            if w / h > 1.25:
+                half_width = int(w / 2)
+                letter_image_regions.append((x, y, half_width, h))
+                letter_image_regions.append((x + half_width, y, half_width, h))
+            else:
+                letter_image_regions.append((x, y, w, h))
 
-    
-    if len(letter_image_regions) != 1:
-        print("Failed to extract letter from the captcha!")
-        dataset[NOT_FIND] += 1
-        destination_file = f"{destination_folder}/notfind/notfind{dataset[NOT_FIND]}.png"
+        
+        if len(letter_image_regions) != 1:
+            print("Failed to extract letter from the captcha!")
+            dataset[NOT_FIND] += 1
+            destination_file = f"{destination_folder}/notfind/notfind{dataset[NOT_FIND]}.png"
+            shutil.move(image_file, destination_file)
+            continue
+
+        
+        letter_image_regions = sorted(letter_image_regions, key=lambda x: x[0])
+
+        for letter_bounding_box in letter_image_regions:
+            x, y, w, h = letter_bounding_box
+
+            letter_image = image[y - 2 : y + h + 2, x - 2 : x + w + 2]
+
+            letter_image = resize_to_fit(letter_image, 20, 20)
+
+            letter_image = np.expand_dims(letter_image, axis=2)
+            letter_image = np.expand_dims(letter_image, axis=0)
+
+            prediction = model.predict(letter_image)
+
+            letter = lb.inverse_transform(prediction)[0]
+            print("Predicted letter:", letter)
+
+            if(not letter in dataset):
+                dataset[letter] = 0
+            dataset[letter] += 1
+            
+            destination_file = f"{destination_folder}/{letter}/{letter}{dataset[letter]}.png"
+
+            shutil.move(image_file, destination_file)
+        
+    except Exception as e:
+        print("Error processing image:", image_file)
+        print("Error message:", str(e))
+
+        dataset[ERROR_FIND] += 1
+        destination_file = f"{destination_folder}/error/error{dataset[ERROR_FIND]}.png"
         shutil.move(image_file, destination_file)
         continue
-
-    
-    letter_image_regions = sorted(letter_image_regions, key=lambda x: x[0])
-
-    for letter_bounding_box in letter_image_regions:
-        x, y, w, h = letter_bounding_box
-
-        letter_image = image[y - 2 : y + h + 2, x - 2 : x + w + 2]
-
-        letter_image = resize_to_fit(letter_image, 20, 20)
-
-        letter_image = np.expand_dims(letter_image, axis=2)
-        letter_image = np.expand_dims(letter_image, axis=0)
-
-        prediction = model.predict(letter_image)
-
-        letter = lb.inverse_transform(prediction)[0]
-        print("Predicted letter:", letter)
-
-        if(not letter in dataset):
-            dataset[letter] = 0
-        dataset[letter] += 1
-        
-        destination_file = f"{destination_folder}/{letter}/{letter}{dataset[letter]}.png"
-
-        shutil.move(image_file, destination_file)
 
 
     
