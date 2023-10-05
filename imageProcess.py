@@ -97,7 +97,7 @@ def respy2(file_path,file_name,path):
     save_image_cv2(removed_white_pixel,file_path)
 
     cut_image(file_path,file_name,f"{path}output/")
-    separate_image(file_path,file_name,f"{path}output/")
+    separate_image(file_path,file_name,f"{path}outputc/")
 
 #--------------------------------------------
 path = "test/ts2/"
@@ -107,7 +107,7 @@ for i in range(1,2):
     current_path = f"{path}{i}/"
 
     for file_name in os.listdir(current_path):
-        if(file_name == "output" or file_name ==  "output2" or file_name ==  "croped"):
+        if(file_name == "output" or file_name ==  "outputc" or file_name ==  "croped"):
             # print(file_name)
             continue
         file_path = os.path.join(current_path, file_name)

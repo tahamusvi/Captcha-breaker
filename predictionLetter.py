@@ -6,8 +6,17 @@ import cv2
 import pickle
 from ImageFunctions import InvertImage
 import shutil
+from checkDataSet import UpdateDataset
 
-dataset = {}
+#---------------------------
+MODEL_FILENAME = "captcha_model.hdf5"
+MODEL_LABELS_FILENAME = "model_labels.dat"
+CAPTCHA_IMAGE_FOLDER = "chars"
+NOT_FIND = "not_find"
+#---------------------------
+dataset = UpdateDataset()
+#---------------------------
+
 
 
 def resize_to_fit(image, width, height):
@@ -46,10 +55,7 @@ def resize_to_fit(image, width, height):
 
     # return the pre-processed image
     return image
-#---------------------------
-MODEL_FILENAME = "captcha_model.hdf5"
-MODEL_LABELS_FILENAME = "model_labels.dat"
-CAPTCHA_IMAGE_FOLDER = "generated_captcha_images"
+
 #---------------------------
 with open(MODEL_LABELS_FILENAME, "rb") as f:
     lb = pickle.load(f)
@@ -87,7 +93,10 @@ for image_file in captcha_image_files:
     
     if len(letter_image_regions) != 1:
         print("Failed to extract letter from the captcha!")
-        exit(1)
+        dataset[NOT_FIND] += 1
+        destination_file = f"{destination_folder}/notfind/notfind{dataset[NOT_FIND]}.png"
+        shutil.move(image_file, destination_file)
+        continue
 
     
     letter_image_regions = sorted(letter_image_regions, key=lambda x: x[0])
