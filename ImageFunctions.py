@@ -7,7 +7,6 @@ import numpy as np
 def save_image_cv2(image,path):
     cv2.imwrite(path, image)
 #--------------------------------------------
-#--------------------------------------------
 #step 1 crop link
 def CropImage(path,fileName,final_path):
     img = Image.open(path)
@@ -35,7 +34,6 @@ def MedianImage(img):
     median_img = cv2.medianBlur(median_img, 3)
     return median_img
 #--------------------------------------------
-
 #step 3 dilate
 def dilateImage(img):
     return cv2.dilate(img, None, iterations=1)
@@ -79,7 +77,6 @@ def remove_white_pixel(img):
                     img[x, y] = 0
                     
     return img            
-
 #--------------------------------------------
 def threshImage(path, fileName,final_path):
     img = cv2.imread(path)
@@ -129,7 +126,6 @@ def cut_image_R(img,img2):
     img_cropped = img2.crop((left_row, 0, width - right_row, height))
     img_cropped.save(f'1.png')
     return cv2.imread(f'1.png')
-
 #------------------------------------------
 def cut_image(path,fileName,final_path):
     img = cv2.imread(path)
@@ -176,10 +172,8 @@ def cut_image(path,fileName,final_path):
 
     img_cropped = img2.crop((left_row, 0, width - right_row, height))
     img_cropped.save(f'{final_path}/{fileName}')
-
 #------------------------------------------
 def rotate_image(path,fileName,final_path,degree):
-    # خواندن تصویر
     img2 = Image.open(path)
     
     if(degree):

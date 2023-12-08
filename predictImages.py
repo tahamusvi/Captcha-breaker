@@ -14,6 +14,9 @@ def resize_to_fit(image, width, height):
     :param height: desired height in pixels
     :return: the resized image
     """
+    # Check if the image is empty
+    if image.size == 0:
+        return image
 
     # grab the dimensions of the image, then initialize
     # the padding values
@@ -35,7 +38,7 @@ def resize_to_fit(image, width, height):
     padH = int((height - image.shape[0]) / 2.0)
 
     # pad the image then apply one more resizing to handle any
-    # rounding issues
+    # rounding issues    
     image = cv2.copyMakeBorder(image, padH, padH, padW, padW,
         cv2.BORDER_REPLICATE)
     image = cv2.resize(image, (width, height))
@@ -45,7 +48,7 @@ def resize_to_fit(image, width, height):
 #---------------------------
 MODEL_FILENAME = "captcha_model.hdf5"
 MODEL_LABELS_FILENAME = "model_labels.dat"
-CAPTCHA_IMAGE_FOLDER = "generated_captcha_images"
+CAPTCHA_IMAGE_FOLDER = "chars"
 #---------------------------
 with open(MODEL_LABELS_FILENAME, "rb") as f:
     lb = pickle.load(f)
@@ -95,7 +98,7 @@ for image_file in captcha_image_files:
 
     # If we found more or less than 4 letters in the captcha, our letter extraction
     # didn't work correcly. Skip the image instead of saving bad training data!
-    if len(letter_image_regions) != 4:
+    if len(letter_image_regions) != 5:
         continue
 
     # Sort the detected letter images based on the x coordinate to make sure

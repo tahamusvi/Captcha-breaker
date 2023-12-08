@@ -7,7 +7,6 @@ import pickle
 from ImageFunctions import InvertImage
 import shutil
 from checkDataSet import UpdateDataset
-
 #---------------------------
 MODEL_FILENAME = "captcha_model.hdf5"
 MODEL_LABELS_FILENAME = "model_labels.dat"
@@ -17,9 +16,6 @@ ERROR_FIND = "error"
 #---------------------------
 dataset = UpdateDataset()
 #---------------------------
-
-
-
 def resize_to_fit(image, width, height):
     """
     A helper function to resize an image to fit within a given size
@@ -56,7 +52,6 @@ def resize_to_fit(image, width, height):
 
     # return the pre-processed image
     return image
-
 #---------------------------
 with open(MODEL_LABELS_FILENAME, "rb") as f:
     lb = pickle.load(f)
