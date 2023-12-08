@@ -1,5 +1,9 @@
 import requests # request img from web
 import shutil # save img locally
+"""
+We use this code to download Golestan Captchas from various university websites.
+ The reason for the large number of universities is to avoid being blocked by their servers.
+"""
 #--------------------------------------------
 links = {
     "sutech" : "https://golestan.sutech.ac.ir/",
@@ -23,10 +27,11 @@ links = {
 slice = f"Forms/AuthenticateUser/captcha.aspx"
 
 #--------------------------------------------
-for i in range(0,2000):
-    nameUni = list(links.keys())[i%15]
+number = int(input("how many captcha needed ? "))
+for i in range(0,number):
+    nameUni = list(links.keys())[i%len(links)]
 
-    file_name = f"captcha/test3/{i}-{nameUni}.png"
+    file_name = f"captcha/{i}-{nameUni}.png"
 
     url = f"{links[nameUni]}{slice}"
 

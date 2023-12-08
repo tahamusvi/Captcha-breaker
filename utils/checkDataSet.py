@@ -1,5 +1,4 @@
 import os
-import shutil
 
 def UpdateDataset():
     dataset = {
@@ -33,8 +32,6 @@ def printDataSet():
     for key in dataset:
         print(f"{key}: {dataset[key]}")
 #--------------------------------------------------------------------------------------
-
-
 delete_files_in_folders()
 printDataSet()
 # print(UpdateDataset())

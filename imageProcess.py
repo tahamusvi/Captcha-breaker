@@ -1,6 +1,5 @@
 from ImageFunctions import *
 import os
-from matplotlib import pyplot as plt
 #--------------------------------------------
 # def count_files(folder_path):
 #     file_count = 0

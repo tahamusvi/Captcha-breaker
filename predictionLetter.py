@@ -6,7 +6,7 @@ import cv2
 import pickle
 from ImageFunctions import InvertImage
 import shutil
-from checkDataSet import UpdateDataset
+from utils.checkDataSet import UpdateDataset
 #---------------------------
 MODEL_FILENAME = "captcha_model.hdf5"
 MODEL_LABELS_FILENAME = "model_labels.dat"
