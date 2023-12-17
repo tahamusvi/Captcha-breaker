@@ -8,8 +8,9 @@
 <div style="text-align: center; padding-bottom: 10px; line-height: 1em;">
         <h3>Please pay attention to the uppercase and lowercase letters.</h3>
         
+        
     </div>
-
+<h4><a style="text-decoration: none; color: #410ef1;" href="{% url 'captcha:answering' %}">Refresh</a></h4>
 <div class="card-body">
     <img src="{{captcha.image.url}}" alt="captcha">
     <form method="POST" action="{% url 'captcha:answering' %}">
