@@ -1,0 +1,17 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+<div class="header-bar">
+    <a href="{% url 'captcha:home' %}">&#8592; Back</a>
+</div>
+
+<div class="card-body">
+    <form method="POST" action="{% url 'captcha:upload' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="captchas_zip" accept=".zip" required>
+        <input class="button" type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock content %}

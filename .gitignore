@@ -10,3 +10,4 @@ test_captcha
 train_data
 .idea
 __pycache__
+data

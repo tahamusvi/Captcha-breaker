@@ -18,7 +18,7 @@
 <div id="tasklist" class="task-items-wrapper">
     
     <div style="text-align: center; padding-bottom: 10px; line-height: 1em;">
-        <h3>No new tasks are created.</h3>
+        <h3>you can download all answered captcha with this <a style="text-decoration: none; color: #410ef1;" href="{% url 'captcha:download' %}">link</a>.</h3>
         {% if ans < all %}
             <h3>Answer a <a style="text-decoration: none; color: #410ef1;" href="{% url 'captcha:answering' %}">Captcha</a> ! </h3>
         {% else %}
