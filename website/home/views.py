@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import zipfile
 from django.http import HttpResponse
 import os 
+from io import BytesIO
 #-----------------------------------------------
 def home(request):
     caps = captcha.objects.filter(answered = False)
@@ -27,15 +28,13 @@ def answering(request):
         cap.answered = True
         cap.save()
 
-        return redirect("captcha:home")
+        return redirect("captcha:answering")
 
     else:
         caps = captcha.objects.filter(answered = False)
         random_caps = random.choice(caps) 
         return render(request,'home/answering.html',{"captcha":random_caps,"form":CaptchaForm()}) 
 #-----------------------------------------------
-from io import BytesIO
-
 @csrf_exempt
 def process_captchas(request):
     if request.method == 'POST':
@@ -68,8 +67,6 @@ def process_zip_files(zip_file):
         new_captcha.image.save(file_name, File(BytesIO(file_content)))
         new_captcha.save()
 #-----------------------------------------------
-
-
 def download_captchas(request):
     # Get the captchas that have been answered
     answered_captchas = captcha.objects.filter(answered=True)
@@ -102,3 +99,4 @@ def download_captchas(request):
 
     else:
         return JsonResponse({'error': 'No answered captchas found'}, status=400)
+#-----------------------------------------------
