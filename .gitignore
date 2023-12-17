@@ -8,3 +8,5 @@ dataset
 chars
 test_captcha
 train_data
+.idea
+__pycache__
