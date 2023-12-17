@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}
+{% block content %}
+
+<div class="header-bar">
+    <a href="{% url "captcha:home" %}">&#8592; Back</a>
+</div>
+
+
+<div class="card-body">
+    <img src="{{captcha.image.url}}" alt="captcha">
+    <form method="POST" action="{% url 'captcha:answering' %}">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="number"  name="id" value="{{captcha.id}}" style="display:none">
+        <input class="button" type="submit" value="Submit">
+    </form>
+</div>
+
+
+{% endblock content %}

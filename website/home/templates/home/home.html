@@ -1,0 +1,58 @@
+{% extends 'home/base.html' %} {% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<div class="header-bar">
+    <div>
+        <h1>Hello {{request.user|title}}</h1>
+        <h3 style="margin:0"><a style="text-decoration: none; color: #410ef1;" href="">{{ans}}</a> out of {{all}} captchas have been answered.</h3>
+        
+    </div>
+
+    
+</div>
+
+
+
+
+
+<div id="tasklist" class="task-items-wrapper">
+    
+    <div style="text-align: center; padding-bottom: 10px; line-height: 1em;">
+        <h3>No new tasks are created.</h3>
+        {% if ans < all %}
+            <h3>Answer a <a style="text-decoration: none; color: #410ef1;" href="{% url 'captcha:answering' %}">Captcha</a> ! </h3>
+        {% else %}
+            <h3>Nice Captchas Ended! </h3>
+        {% endif %}
+        
+    </div>
+    
+</div>
+
+<script>
+    var taskList = document.getElementById("tasklist");
+    var reorderForm = document.getElementById("reorderForm");
+    var positionInput = document.getElementById("positionInput");
+
+    let sortable = Sortable.create(taskList, {
+        handle: '.handle',
+        ghostClass: 'dropArea',
+        chosenClass: 'selectedTask',
+
+    });
+
+    function reordering() {
+        const rows = document.getElementsByClassName("task-wrapper");
+        let pos = [];
+        for (let row of rows) {
+            pos.push(row.dataset.position);
+        }
+        console.log(pos.join(","))
+        positionInput.value = pos.join(',');
+        reorderForm.submit();
+    }
+
+    document.ondrop = reordering
+</script>
+
+{% endblock content %}
