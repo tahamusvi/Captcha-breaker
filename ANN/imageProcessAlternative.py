@@ -72,8 +72,8 @@ for i in range(1, 2):
         file_path = os.path.join(current_path, file_name)
         CropImage(file_path, file_name, f"{current_path}croped/")
 
-    for file_name in os.listdir(f"{current_path}croped/"):
-        file_path = os.path.join(f"{current_path}croped/", file_name)
+    for file_name in os.listdir(f"{current_path}output/"):
+        file_path = os.path.join(f"{current_path}output/", file_name)
         respy2(file_path, file_name, current_path)
 
     for file_name in os.listdir(f"{current_path}outputc/"):

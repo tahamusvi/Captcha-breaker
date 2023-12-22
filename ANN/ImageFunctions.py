@@ -288,13 +288,16 @@ def separate_image(path, fileName, final_path, name=None):
 # ------------------------------------------
 def separate_image_alternative(path, fileName, final_path, name=None):
     img = cv2.imread(path)
+    img = InvertImage(img)
+    img2 = Image.open(path)
+
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    img = cv2.copyMakeBorder(img, 20, 20, 20, 20, cv2.BORDER_REPLICATE)
 
     thresh = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
 
-    contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    # Hack for compatibility with different OpenCV versions
-    contours = contours[0] if imutils.is_cv2() else contours[1]
+    contours, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     letter_image_regions = []
 
@@ -306,17 +309,26 @@ def separate_image_alternative(path, fileName, final_path, name=None):
 
         # Compare the width and height of the contour to detect letters that
         # are conjoined into one chunk
-        if w / h > 1.25:
-            # This contour is too wide to be a single letter!
-            # Split it in half into two letter regions!
-            half_width = int(w / 2)
-            letter_image_regions.append((x, y, half_width, h))
-            letter_image_regions.append((x + half_width, y, half_width, h))
-        else:
-            # This is a normal letter by itself
-            letter_image_regions.append((x, y, w, h))
+        # if w / h > 1.25:
+        #     # This contour is too wide to be a single letter!
+        #     # Split it in half into two letter regions!
+        #     half_width = int(w / 2)
+        #     letter_image_regions.append((x, y, half_width, h))
+        #     letter_image_regions.append((x + half_width, y, half_width, h))
+        # else:
+        #     # This is a normal letter by itself
+        #     letter_image_regions.append((x, y, w, h))
+        letter_image_regions.append((x, y, w, h))
 
-    img_cropped = sorted(letter_image_regions, key=lambda x: x[0])
+    letter_image_regions = sorted(letter_image_regions, key=lambda x: x[0])
+    print(letter_image_regions)
+    img_cropped = []
+
+    for coords in letter_image_regions:
+        try:
+            img_cropped.append(img2.crop((coords[0], coords[1], coords[2], coords[3])))
+        except:
+            pass
 
     if(name):
         for i in range(5):
