@@ -289,8 +289,9 @@ def separate_image(path, fileName, final_path, name=None):
 def separate_image_alternative(path, fileName, final_path, name=None):
     img = cv2.imread(path)
 
-    contours = cv2.findContours(
-        img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    thresh = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
+
+    contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Hack for compatibility with different OpenCV versions
     contours = contours[0] if imutils.is_cv2() else contours[1]

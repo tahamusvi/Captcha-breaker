@@ -1,31 +1,31 @@
 from ImageFunctions import *
-import os
+#import os
 import os.path
 import cv2
-import glob
-import imutils
+#import glob
+#import imutils
 
 # --------------------------------------------
 
-
-def respy(file_path, file_name, path):
-    output = f"{path}output/"
-    img = cv2.imread(file_path)
-    img2 = Image.open(file_path)
-
-    # CropImage(file_path,file_name,output)
-    img = GrayImage(img)
-
-    file_path = f"{output}{file_name}"
-
-    img = dilateImage(img)
-    img = InvertImage(img)
-    img = cut_image_R(img, img2)
-    img = TImage(img)
-    img = convert_to_binary(img)
-    save_image_cv2(img, file_path)
-    # cut_image(file_path,file_name,path)
-    # separate_image(file_path,file_name,sep)
+#
+# def respy(file_path, file_name, path):
+#     output = f"{path}output/"
+#     img = cv2.imread(file_path)
+#     img2 = Image.open(file_path)
+#
+#     # CropImage(file_path,file_name,output)
+#     img = GrayImage(img)
+#
+#     file_path = f"{output}{file_name}"
+#
+#     img = dilateImage(img)
+#     img = InvertImage(img)
+#     img = cut_image_R(img, img2)
+#     img = TImage(img)
+#     img = convert_to_binary(img)
+#     save_image_cv2(img, file_path)
+#     # cut_image(file_path,file_name,path)
+#     # separate_image(file_path,file_name,sep)
 
 # --------------------------------------------
 
@@ -59,7 +59,7 @@ def respy2(file_path, file_name, path):
 
 
 # --------------------------------------------
-path = "test/ts2/"
+path = "captcha"
 sep = f"{path}sep/"
 
 for i in range(1, 2):
