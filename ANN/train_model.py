@@ -51,7 +51,7 @@ def resize_to_fit(image, width, height):
     return image
 #---------------------------
 
-LETTER_IMAGES_FOLDER = "extracted_letter_images"
+LETTER_IMAGES_FOLDER = "trainCaptcha"
 MODEL_FILENAME = "captcha_model.hdf5"
 MODEL_LABELS_FILENAME = "model_labels.dat"
 
@@ -75,7 +75,7 @@ for image_file in paths.list_images(LETTER_IMAGES_FOLDER):
     image = np.expand_dims(image, axis=2)
 
     # Grab the name of the letter based on the folder it was in
-    label = image_file.split(os.path.sep)[-1]
+    label = image_file.split(os.path.sep)[-2]
 
     # Add the letter image and it's label to our training data
     data.append(image)
@@ -116,14 +116,11 @@ model.add(keras.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(500, activation="relu"))
 
-# Output layer with 32 nodes (one for each possible letter/number we predict)
+# Output layer with 62 nodes (one for each possible letter/number we predict)
 model.add(keras.layers.Dense(62, activation="softmax"))
 
 # Ask Keras to build the TensorFlow model behind the scenes
 model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
-
-print(Y_train[0])
-print(len(X_test), len(Y_test))
 
 # Train the neural network
 model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=62, epochs=10, verbose=1)
