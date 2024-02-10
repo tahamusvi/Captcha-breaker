@@ -48,7 +48,7 @@ def resize_to_fit(image, width, height):
 #---------------------------
 MODEL_FILENAME = "captcha_model.hdf5"
 MODEL_LABELS_FILENAME = "model_labels.dat"
-CAPTCHA_IMAGE_FOLDER = "chars"
+CAPTCHA_IMAGE_FOLDER = "captcha1"
 #---------------------------
 with open(MODEL_LABELS_FILENAME, "rb") as f:
     lb = pickle.load(f)
@@ -144,3 +144,5 @@ for image_file in captcha_image_files:
     # Show the annotated image
     cv2.imshow("Output", output)
     cv2.waitKey()
+
+print(captcha_image_files)
