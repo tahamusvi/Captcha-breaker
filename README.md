@@ -10,6 +10,12 @@ This repository is dedicated to breaking the Golestan website's captcha using ne
 - [Developers](#developers) 
 
 
+## Clone
+
+```
+git clone https://github.com/tahamusvi/Captcha-breaker.git . --depth 1
+```
+
 ## Workflow
 
 To utilize this extension, you need to follow the steps below:
