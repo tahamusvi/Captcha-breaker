@@ -11,3 +11,5 @@ train_data
 .idea
 __pycache__
 data
+trainCaptcha
+captcha_model.hdf5
